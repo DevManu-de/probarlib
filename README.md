@@ -5,80 +5,77 @@ This is a library that allows you to diplay a progress bar.
 
 ## Explanation of functions
 
-### bar_create()
-
-#### 1. Argument 
+> bar_create()
+>
+>> 1. Argument 
 is the width of the terminal in characters. (How many characters fit in one row)
 IMPORTANT this cant be smaller than `strlen(text) + 17` because if it is then the bar it self would have a negative width.
 The 17 from the calculation comes from the 10 spaces between the text and 3 for the percentage and the other 4 from the %, a space and the [] around the bar.
 
-#### 2. Argument
+>> 2. Argument
 is the indicator, this char shows the progress. (Example: [#########        ] The # is the indicator in this bar example)
 
-#### 3. Argument
+>> 3. Argument
 is the text that is diplayed in front of the bar.
 
-#### Return value
+>> Return value
 it returns a pointer to a progress bar structure.
 
-### bar_set_progress()
-
-#### 1. Argument
+> bar_set_progress()
+>
+>> 1. Argument
 is the pointer to the progress bar.
 
-#### 2. Argument
+>> 2. Argument
 is the percentage of completion as an unsigned integer.
 
-#### Return value
+>> Return value
 NONE (void)
 
-### bar_print()
-
-#### 1. Argument
+> bar_print()
+>
+>> 1. Argument
 is the bar to print.
 
-#### Return value
+>> Return value
 is 0 on succes.
 
-### bar_set_width
-sets the with of the entire row that the bar + text use.
-
-#### 1. Argument
+> bar_set_width
+>
+>> 1. Argument
 is the bar.
 
-#### 2. Argument
+>> 2. Argument
 is the width of the terminal in characters. (How many characters fit in one row)
 
-#### Return value
+>> Return value
 NONE (void)
 
-### bar_set_text()
-
-#### 1. Argument
+> bar_set_text()
+>
+>> 1. Argument
 is the bar.
 
-#### 2. Argument
+>> 2. Argument
 is the new text.
 
-#### Return value
+>> Return value
 NULL (void)
 
-### bar_get_progress()
-returns the progress of a bar.
-
-#### 1. Argument
+> bar_get_progress()
+>
+>> 1. Argument
 is the bar.
 
-#### Return value
+>> Return value
 the percentage of the bar.
 
-### bar_destroy()
-destroys the bar.
-
-#### 1. Argument
+> bar_destroy()
+>
+>> 1. Argument
 is the bar.
 
-#### Return value
+>> Return value
 NONE (void)
 
 ## Usage
