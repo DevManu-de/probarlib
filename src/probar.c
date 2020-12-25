@@ -1,9 +1,11 @@
+/* See LICENSE file for copyright and license details. */
+
 #include "probar.h"
 #include "stdio.h"
 #include <stdlib.h>
 #include <string.h>
 
-progressbar *create_bar(unsigned int term_width, char indicator, char *text)
+progressbar *bar_create(unsigned int term_width, char indicator, char *text)
 {
     progressbar *bar = malloc(sizeof(progressbar));
     bar->indicator = indicator;
@@ -14,30 +16,34 @@ progressbar *create_bar(unsigned int term_width, char indicator, char *text)
     return bar;
 
 }
-void set_bar_progress(progressbar *bar, unsigned int progress)
+void bar_set_progress(progressbar *bar, unsigned int progress)
 {
     bar->progress = progress;
 
 }
 
-void set_bar_width(progressbar *bar, unsigned int term_width)
+void bar_set_width(progressbar *bar, unsigned int term_width)
 {
     bar->term_width = term_width;
 
 }
 
-int print_bar(progressbar *bar)
+int bar_print(progressbar *bar)
 {
+    /* This is only the bar it self */
     unsigned int bar_width = bar->term_width - strlen(bar->text) - 17;
+    /* This is how much one indicator affects the progress */
     float chars_per_iter = (float) bar_width / 100;
     float chars = 0.0;
     unsigned int chars_printed = 0;
 
+    /* Print the first part of the  */
     printf("\r%s          %3d%% [", bar->text, bar->progress);
     unsigned int i;
     for (i = 0; i < bar->progress; i++)
     {
         chars += chars_per_iter;
+        /* Only print characters if 1 char is 1 char in the terminal  */
         if (chars >= 1)
         {
             int j;
@@ -50,22 +56,39 @@ int print_bar(progressbar *bar)
         }
     }
 
+    /* In some cases the bar doesnt completely fill because the last chars is not >= 1 */
+    if (chars_printed < bar_width)
+    {
+        putc(bar->indicator, stdout);
+        chars_printed++;
+    }
+
+    /* Prints the remaining whitespaces  */
     for (i = 0; i < bar_width - chars_printed; i++)
     {
         putc(' ', stdout);
     }
+    /* End the bar and flush stdout */
     putc(']', stdout);
     fflush(stdout);
     return 0;
 
 }
 
-unsigned int get_progress(progressbar *bar)
+void bar_set_text(progressbar *bar, char *text)
+{
+    free(bar->text);
+    bar->text = strdup(text);
+
+}
+
+
+unsigned int bar_get_progress(progressbar *bar)
 {
     return bar->progress;
 }
 
-void destroy_bar(progressbar *bar)
+void bar_destroy(progressbar *bar)
 {
     free(bar);
 }
