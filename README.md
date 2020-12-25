@@ -5,7 +5,7 @@ This is a library that allows you to diplay a progress bar.
 
 ## Explanation of functions
 
-> bar_create()
+## > bar_create()
 >
 >> 1. Argument 
 is the width of the terminal in characters. (How many characters fit in one row)
@@ -21,7 +21,7 @@ is the text that is diplayed in front of the bar.
 >> Return value
 it returns a pointer to a progress bar structure.
 
-> bar_set_progress()
+## > bar_set_progress()
 >
 >> 1. Argument
 is the pointer to the progress bar.
@@ -32,7 +32,7 @@ is the percentage of completion as an unsigned integer.
 >> Return value
 NONE (void)
 
-> bar_print()
+## > bar_print()
 >
 >> 1. Argument
 is the bar to print.
@@ -51,7 +51,7 @@ is the width of the terminal in characters. (How many characters fit in one row)
 >> Return value
 NONE (void)
 
-> bar_set_text()
+## > bar_set_text()
 >
 >> 1. Argument
 is the bar.
@@ -62,7 +62,7 @@ is the new text.
 >> Return value
 NULL (void)
 
-> bar_get_progress()
+## > bar_get_progress()
 >
 >> 1. Argument
 is the bar.
@@ -70,7 +70,7 @@ is the bar.
 >> Return value
 the percentage of the bar.
 
-> bar_destroy()
+## > bar_destroy()
 >
 >> 1. Argument
 is the bar.
