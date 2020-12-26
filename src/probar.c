@@ -1,9 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
-#include "probar.h"
-#include "stdio.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "probar.h"
 
 progressbar *bar_create(unsigned int term_width, char indicator, char *text)
 {
