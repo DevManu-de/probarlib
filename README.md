@@ -115,7 +115,7 @@ putc('\n', stdout);
 bar_destroy(bar);
 ```
 Output:
-`Sample text$~~~~~~~~~~~$0% [$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$]`
+`Sample text&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0% []`
 
 see the `src/main.c` for more code
 in the `src/main.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
