@@ -2,7 +2,7 @@
 probarlib is a library that allows you to create a simple progress bar in the terminal.
 You can customize the text in front of the bar the bar filling character (indicator) and the size of the entire bar.
 If you want to use it in your own project you need to know the width of the terminal or enter a static width.
-I chose not to get the terminal width dynamically because it could cause some unnecessary calculation for example:
+I chose not to get the terminal width dynamically because it could cause some unnecessary calculations for example:
 You already have a project that collects the width of the terminal so it is unnecessary to collect it again.
 Another example:
 You want the bar only to take half of the terminal.
@@ -114,6 +114,8 @@ putc('\n', stdout);
 /* Destroys the bar */
 bar_destroy(bar);
 ```
+Output:
+`Sample text            0% [                                            ]`
 
 see the `src/main.c` for more code
 in the `src/main.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
