@@ -30,6 +30,10 @@ void bar_set_width(progressbar *bar, unsigned int term_width)
 
 int bar_print(progressbar *bar)
 {
+
+    /* Check if term_width is large enough */
+    if ((int) (bar->term_width - strlen(bar->text) - 17) <= 0)
+        return -1;
     /* This is only the bar it self */
     unsigned int bar_width = bar->term_width - strlen(bar->text) - 17;
     /* This is how much one indicator affects the progress */
@@ -56,7 +60,7 @@ int bar_print(progressbar *bar)
         }
     }
 
-    /* In some cases the bar doesnt completely fill because the last chars is not >= 1 */
+    /* In some cases the bar doesnt completely fill because the last char is not >= 1 */
     if (chars_printed < bar_width)
     {
         putc(bar->indicator, stdout);

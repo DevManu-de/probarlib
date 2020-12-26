@@ -8,7 +8,7 @@
 int main(){
 
 	/* Create bar with a total row size of 210, indicator = # and a text */
-	progressbar *bar = bar_create(210, '#', "This is a sample text");
+	progressbar *bar = bar_create(10, '#', "This is a sample text");
 
 	int i;
 	for (i = 0; i < 101; i++)
