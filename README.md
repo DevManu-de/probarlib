@@ -1,4 +1,9 @@
 # probarlib
+probarlib is a library that allows you to create a simple progress bar in the terminal.
+You can customize the text in front of the bar the bar filling character (indicator) and the size of the entire bar.
+If you want to use it in your own project you need to know the width of the terminal or enter a static width
+
+BTW probarlib is C89 compatible
 
 # Description
 This is a library that allows you to diplay a progress bar.
