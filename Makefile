@@ -1,5 +1,7 @@
+# From https://github.com/danielpinto8zz6/c-cpp-project-generator#readme
+
 CC = gcc
-CFLAGS := -Wall -Wextra -g -std=gnu89
+CFLAGS := -Wall -Wextra -std=gnu89
 LFLAGS =
 OUTPUT := output
 SRC := src

@@ -11,13 +11,14 @@ int main(){
 	progressbar *bar = bar_create(210, '#', "This is a sample text");
 
 	int i;
-	for (i = 0; i < 101; i++)
+	for (i = 0; i < 101; ++i)
 	{
 		/* This demonstrates the ability to resize the bar when terminal changes */
 		if (i == 50)
 			bar_set_width(bar, 105);
 
-		/* This demonstrates the ability to resize the bar when terminal changes */
+		/* This demonstrates the ability to resize the bar when terminal changes
+		 * and change the text during execution */
 		if (i == 75)
 		{
 			bar_set_text(bar, "text");
