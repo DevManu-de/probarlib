@@ -25,7 +25,7 @@ This is a library that allows you to diplay a progress bar.
 >The 17 from the calculation comes from the 10 spaces between the text and 3 for the percentage and the other 4 from the %, a space and the [] around the bar.
 >
 > 2. Argument
->is the indicator, this char shows the progress. (Example: [#########        ] The # is the indicator in this bar example)
+>is the indicator, this char shows the progress. (Example: [#######        ] The # is the indicator in this bar example)
 >
 > 3. Argument
 >is the text that is diplayed in front of the bar.
@@ -51,8 +51,8 @@ This is a library that allows you to diplay a progress bar.
 >
 > Return value
 >is 0 on succes.
->
-> bar_set_width
+
+## bar_set_width()
 >
 > 1. Argument
 >is the bar.
@@ -117,6 +117,6 @@ bar_destroy(bar);
 Output:
 `Sample text          0% [                               ]`
 
-see the `src/main.c` for more code
-in the `src/main.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
+see the `src/main.c` for more code.
+In the `src/main.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
 In reallity this wont happen and its only in the code to show the ability to resize the bar.
