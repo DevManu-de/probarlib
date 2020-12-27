@@ -107,11 +107,12 @@ void bar_destroy(progress_bar *bar)
 /* Here ends the part of progress bar */
 
 /* Here begins the part of progress indicator */
-progress_indicator *indicator_create(unsigned int term_width, char *text)
+progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size)
 {
     progress_indicator *indicator = malloc(sizeof(progress_indicator));
     indicator->term_width = term_width;
-    indicator->text = create_shared_memory(indicator->term_width);
+    indicator->max_text_size = max_text_size;
+    indicator->text = create_shared_memory(indicator->max_text_size);
     memcpy(indicator->text, text, strlen(text));
     indicator->text[strlen(indicator->text)] = '\0';
     indicator->pid = 0;
@@ -180,6 +181,7 @@ void indicator_destroy(progress_indicator *indicator)
 {
     if (indicator->is_stopped == 0)
         kill(indicator->pid, SIGKILL);
+    munmap(indicator->text, indicator->max_text_size);
     free(indicator);
 
 }

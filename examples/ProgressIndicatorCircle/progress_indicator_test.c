@@ -8,17 +8,17 @@
 
 int main(){
 
-    progress_indicator *indicator = indicator_create(50, "A sample text");
+    progress_indicator *indicator = indicator_create(50, "A sample text", 40);
     indicator_start(indicator);
     sleep(1);
     indicator_set_text(indicator, "Progress 1");
-    sleep(1);
+    sleep(3);
     indicator_set_text(indicator, "Progress 2 is doing shit");
-    sleep(1);
+    sleep(2);
     indicator_set_text(indicator, "Progress 3");
     sleep(1);
     indicator_set_text(indicator, "P");
-    sleep(1);
+    sleep(5);
     indicator_set_text(indicator, "Progress 5");
     indicator_stop(indicator);
     indicator_destroy(indicator);
