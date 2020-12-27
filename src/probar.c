@@ -110,26 +110,30 @@ progress_indicator *indicator_create(unsigned int term_width, char *text)
     indicator->term_width = term_width;
     indicator->text = strdup(text);
     indicator->pid = 0;
+    indicator->is_stopped = 0;
     return indicator;
 }
 
 int indicator_start(progress_indicator *indicator)
 {
-    indicator->pid = fork();
     unsigned int text_indicator_gap = indicator->term_width - strlen(indicator->text) - 1;
+    indicator->pid = fork();
     if (indicator->pid == 0)
     {
-        printf("%d", indicator->pid);
-        exit(0);
         /* This is the child */
-        printf("%s", indicator->text);
-        unsigned int i;
-        for (i = 0; i < text_indicator_gap; ++i)
-        {
-            putc(' ', stdout);
-        }
-        putc('|', stdout);
 
+        while (indicator->is_stopped == 0)
+        {
+            printf("\r%s", indicator->text);
+            unsigned int i;
+            for (i = 0; i < text_indicator_gap; ++i)
+            {
+                putc(' ', stdout);
+            }
+            putc('|', stdout);
+            fflush(stdout);
+            usleep(1000000);
+        }
     }
     else if (indicator->pid > 0)
     {
@@ -144,18 +148,24 @@ int indicator_start(progress_indicator *indicator)
 
     return 0;
 }
-void indicator_set_text();
+void indicator_set_text(progress_indicator *indicator, char *text)
+{
+
+    free(indicator->text);
+    indicator->text = strdup(text);
+
+}
 void indicator_stop(progress_indicator *indicator)
 {
 
     kill(indicator->pid, SIGTERM);
-    indicator->pid = 0;
+    indicator->is_stopped = 1;
 
 }
 void indicator_destroy(progress_indicator *indicator)
 {
-    if (indicator->pid > 0)
-        kill(indicator->pid, SIGTERM);
+    if (indicator->is_stopped == 0)
+        kill(indicator->pid, SIGKILL);
     free(indicator);
 
 }
