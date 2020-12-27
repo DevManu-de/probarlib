@@ -16,7 +16,7 @@ typedef struct __progress_bar {
 
 typedef struct __progress_indicator {
 
-    unsigned int term_width;
+    unsigned int *term_width;
     char *text;
     unsigned int max_text_size;
     pid_t pid;
@@ -36,6 +36,7 @@ void bar_destroy(progress_bar *bar);
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size);
 int indicator_start(progress_indicator *indicator);
 void indicator_set_text(progress_indicator *indicator, char *text);
+void indicator_set_width(progress_indicator *indicator, unsigned int term_width);
 void indicator_stop(progress_indicator *indicator);
 void indicator_destroy(progress_indicator *indicator);
 

@@ -110,7 +110,8 @@ void bar_destroy(progress_bar *bar)
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size)
 {
     progress_indicator *indicator = malloc(sizeof(progress_indicator));
-    indicator->term_width = term_width;
+    indicator->term_width = create_shared_memory(sizeof(int));
+    indicator->term_width[0] = term_width;
     indicator->max_text_size = max_text_size;
     indicator->text = create_shared_memory(indicator->max_text_size);
     memcpy(indicator->text, text, strlen(text));
@@ -132,7 +133,7 @@ int indicator_start(progress_indicator *indicator)
 
         while (indicator->is_stopped == 0)
         {
-            unsigned int text_indicator_gap = indicator->term_width - strlen(indicator->text) - 1;
+            unsigned int text_indicator_gap = indicator->term_width[0] - strlen(indicator->text) - 1;
             printf("\r%s", indicator->text);
             unsigned int i;
             for (i = 0; i < text_indicator_gap; ++i)
@@ -170,6 +171,14 @@ void indicator_set_text(progress_indicator *indicator, char *text)
 
 
 }
+
+void indicator_set_width(progress_indicator *indicator, unsigned int term_width)
+{
+
+    indicator->term_width[0] = term_width;
+
+}
+
 void indicator_stop(progress_indicator *indicator)
 {
 
@@ -182,6 +191,7 @@ void indicator_destroy(progress_indicator *indicator)
     if (indicator->is_stopped == 0)
         kill(indicator->pid, SIGKILL);
     munmap(indicator->text, indicator->max_text_size);
+    munmap(indicator->term_width, sizeof(int));
     free(indicator);
 
 }

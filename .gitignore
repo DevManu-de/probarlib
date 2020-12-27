@@ -1,3 +1,4 @@
-output/main
+examples/BasicPogressBar/progress_bar_test
+examples/PogressIndicatorCircle/progress_indicator_test
 *.o
 *.a

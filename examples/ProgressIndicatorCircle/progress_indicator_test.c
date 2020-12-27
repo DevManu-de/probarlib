@@ -15,6 +15,7 @@ int main(){
     sleep(3);
     indicator_set_text(indicator, "Progress 2 is doing shit");
     sleep(2);
+    indicator_set_width(indicator, 210);
     indicator_set_text(indicator, "Progress 3");
     sleep(1);
     indicator_set_text(indicator, "P");
