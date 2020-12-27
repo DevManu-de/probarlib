@@ -22,6 +22,13 @@ BasicProgressBar:
 ProgressIndicationCircle:
 ![ProgressIndicationCircle](images/ProgressIndicationCircle.png)
 
-## Test the different bars
+# Universal function for both bars
+
+## get_term_width()
+> 
+> Return value
+> is the width of the current terminal.
+
+# Test the different bars
 
 There are examples and usefull documentations in the `examples/` directory for both of the progress bars.

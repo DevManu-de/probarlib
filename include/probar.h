@@ -5,6 +5,8 @@
 
 #include <unistd.h>
 
+unsigned int get_term_width();
+
 typedef struct __progress_bar {
 
     unsigned int term_width;

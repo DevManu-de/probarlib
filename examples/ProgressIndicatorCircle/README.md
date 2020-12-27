@@ -18,6 +18,14 @@ The progress indicator circle prints a text and a rotating aimantion. More infor
 > Return value
 > it returns a pointer to a progress indicator structure.
 
+## indicator_start()
+>
+> 1. Argument
+> is the progress indicator
+>
+> Return value
+> is 0 on successful creation of the child. -1 if child creation failed.
+
 ## indicator_set_width()
 > 
 > 1. Argument

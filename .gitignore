@@ -1,4 +1,4 @@
-examples/BasicPogressBar/progress_bar_test
-examples/PogressIndicatorCircle/progress_indicator_test
+examples/BasicProgressBar/progress_bar_test
+examples/ProgressIndicatorCircle/progress_indicator_test
 *.o
 *.a

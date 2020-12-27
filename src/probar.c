@@ -5,11 +5,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 
 #include "probar.h"
 
 void *create_shared_memory(size_t size);
+
+unsigned int get_term_width()
+{
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+    return w.ws_col;
+
+}
+
 
 /* Here begins the part of progress bar */
 progress_bar *bar_create(unsigned int term_width, char indicator, char *text)
@@ -110,11 +121,18 @@ void bar_destroy(progress_bar *bar)
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size)
 {
     progress_indicator *indicator = malloc(sizeof(progress_indicator));
+    /* Create a shared memory for the child to react to terminal changes*/
     indicator->term_width = create_shared_memory(sizeof(int));
     indicator->term_width[0] = term_width;
+
+    /* The max_text_size needs to be set because the shared memory cannot be
+     * realloced */
     indicator->max_text_size = max_text_size;
+
+    /* Put text in shared memory for the child to update it later */
     indicator->text = create_shared_memory(indicator->max_text_size);
     memcpy(indicator->text, text, strlen(text) + 1);
+
     indicator->pid = 0;
     indicator->is_stopped = 0;
     return indicator;
@@ -122,9 +140,12 @@ progress_indicator *indicator_create(unsigned int term_width, char *text, unsign
 
 int indicator_start(progress_indicator *indicator)
 {
+    /* Array for the animation */
     char circle[] = {'|', '/', '-', '\\'};
     unsigned int circle_position = 0;
+
     indicator->is_stopped = 0;
+    /* Create a child process */
     indicator->pid = fork();
     if (indicator->pid == 0)
     {
@@ -132,15 +153,22 @@ int indicator_start(progress_indicator *indicator)
 
         while (indicator->is_stopped == 0)
         {
+            /* Calculate gap between text and indicator */
             unsigned int text_indicator_gap = indicator->term_width[0] - strlen(indicator->text) - 1;
+            /* Print text */
             printf("\r%s", indicator->text);
+
+            /* Print spaces between text and indicator */
             unsigned int i;
             for (i = 0; i < text_indicator_gap; ++i)
             {
                 putc(' ', stdout);
             }
+            /* Print the correct circle position to make it look
+             * like a real animation */
             putc(circle[circle_position], stdout);
             fflush(stdout);
+
             if (circle_position > 3)
                 circle_position = 0;
             else
@@ -179,17 +207,24 @@ void indicator_set_width(progress_indicator *indicator, unsigned int term_width)
 
 void indicator_stop(progress_indicator *indicator)
 {
-
+    /* Kill the child and set is_stopped.
+     * On successful kill kill returns 0.
+     * On failed kill kill returns -1
+     * so is_stopped always has the correct value */
     indicator->is_stopped = kill(indicator->pid, SIGTERM) + 1;
     putc('\n', stdout);
 
 }
 void indicator_destroy(progress_indicator *indicator)
 {
+    /* If killing failed before then force
+     * kill child now */
     if (indicator->is_stopped == 0)
         kill(indicator->pid, SIGKILL);
+    /* Dealloc all shared memory */
     munmap(indicator->text, indicator->max_text_size);
     munmap(indicator->term_width, sizeof(int));
+    /* Finally dealloc the pointer */
     free(indicator);
 
 }
@@ -198,8 +233,11 @@ void indicator_destroy(progress_indicator *indicator)
 
 void *create_shared_memory(size_t size) {
 
-  int protection = PROT_READ | PROT_WRITE;
-  int visibility = MAP_SHARED | MAP_ANONYMOUS;
-  return mmap(NULL, size, protection, visibility, -1, 0);
+    /* Make shared memory readable and writeable */
+    int protection = PROT_READ | PROT_WRITE;
+    /* Make shared memory only visible to its children */
+    int visibility = MAP_SHARED | MAP_ANONYMOUS;
+    /* Return pointer to shared memory */
+    return mmap(NULL, size, protection, visibility, -1, 0);
 
 }
