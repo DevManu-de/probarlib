@@ -6,9 +6,9 @@
 
 #include "probar.h"
 
-progressbar *bar_create(unsigned int term_width, char indicator, char *text)
+progress_bar *bar_create(unsigned int term_width, char indicator, char *text)
 {
-    progressbar *bar = malloc(sizeof(progressbar));
+    progress_bar *bar = malloc(sizeof(progress_bar));
     bar->indicator = indicator;
     bar->progress = 0;
     bar->term_width = term_width;
@@ -17,19 +17,19 @@ progressbar *bar_create(unsigned int term_width, char indicator, char *text)
     return bar;
 
 }
-void bar_set_progress(progressbar *bar, unsigned int progress)
+void bar_set_progress(progress_bar *bar, unsigned int progress)
 {
     bar->progress = progress;
 
 }
 
-void bar_set_width(progressbar *bar, unsigned int term_width)
+void bar_set_width(progress_bar *bar, unsigned int term_width)
 {
     bar->term_width = term_width;
 
 }
 
-int bar_print(progressbar *bar)
+int bar_print(progress_bar *bar)
 {
 
     /* Check if term_width is large enough */
@@ -80,7 +80,7 @@ int bar_print(progressbar *bar)
 
 }
 
-void bar_set_text(progressbar *bar, char *text)
+void bar_set_text(progress_bar *bar, char *text)
 {
     free(bar->text);
     bar->text = strdup(text);
@@ -88,12 +88,12 @@ void bar_set_text(progressbar *bar, char *text)
 }
 
 
-unsigned int bar_get_progress(progressbar *bar)
+unsigned int bar_get_progress(progress_bar *bar)
 {
     return bar->progress;
 }
 
-void bar_destroy(progressbar *bar)
+void bar_destroy(progress_bar *bar)
 {
     free(bar);
 }

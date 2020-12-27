@@ -10,15 +10,15 @@ typedef struct {
     char *text;
     unsigned int progress;
 
-} progressbar;
+} progress_bar;
 
 /* See README.md for more info */
-progressbar *bar_create(unsigned int term_width, char indicator, char *text);
-void bar_set_progress(progressbar *bar, unsigned int progress);
-int bar_print(progressbar *bar);
-void bar_set_width(progressbar *bar, unsigned int term_width);
-unsigned int bar_get_progress(progressbar *bar);
-void bar_set_text(progressbar *bar, char *text);
-void bar_destroy(progressbar *bar);
+progress_bar *bar_create(unsigned int term_width, char indicator, char *text);
+void bar_set_progress(progress_bar *bar, unsigned int progress);
+int bar_print(progress_bar *bar);
+void bar_set_width(progress_bar *bar, unsigned int term_width);
+unsigned int bar_get_progress(progress_bar *bar);
+void bar_set_text(progress_bar *bar, char *text);
+void bar_destroy(progress_bar *bar);
 
 #endif
