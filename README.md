@@ -8,7 +8,7 @@ Another example:
 You want the bar only to take half of the terminal.
 And dynamically collecting the terminal size would result in a dependency like ncurses.
 
-BTW probarlib is C89 compatible but not windows
+BTW probarlib is C89 compatible but not windows only linux is tested and supported
 
 If any questions come up dont hesitate to open an issue or if you want to contribute just open a pull request.
 
