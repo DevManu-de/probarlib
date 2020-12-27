@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <sys/mman.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +8,8 @@
 #include <unistd.h>
 
 #include "probar.h"
+
+void *create_shared_memory(size_t size);
 
 /* Here begins the part of progress bar */
 progress_bar *bar_create(unsigned int term_width, char indicator, char *text)
@@ -108,7 +111,9 @@ progress_indicator *indicator_create(unsigned int term_width, char *text)
 {
     progress_indicator *indicator = malloc(sizeof(progress_indicator));
     indicator->term_width = term_width;
-    indicator->text = strdup(text);
+    indicator->text = create_shared_memory(indicator->term_width);
+    memcpy(indicator->text, text, strlen(text));
+    indicator->text[strlen(indicator->text)] = '\0';
     indicator->pid = 0;
     indicator->is_stopped = 0;
     return indicator;
@@ -116,7 +121,9 @@ progress_indicator *indicator_create(unsigned int term_width, char *text)
 
 int indicator_start(progress_indicator *indicator)
 {
-    unsigned int text_indicator_gap = indicator->term_width - strlen(indicator->text) - 1;
+    char circle[] = {'|', '/', '-', '\\'};
+    unsigned int circle_position = 0;
+    indicator->is_stopped = 0;
     indicator->pid = fork();
     if (indicator->pid == 0)
     {
@@ -124,15 +131,21 @@ int indicator_start(progress_indicator *indicator)
 
         while (indicator->is_stopped == 0)
         {
+            unsigned int text_indicator_gap = indicator->term_width - strlen(indicator->text) - 1;
             printf("\r%s", indicator->text);
             unsigned int i;
             for (i = 0; i < text_indicator_gap; ++i)
             {
                 putc(' ', stdout);
             }
-            putc('|', stdout);
+            putc(circle[circle_position], stdout);
             fflush(stdout);
-            usleep(1000000);
+            if (circle_position > 3)
+                circle_position = 0;
+            else
+                circle_position++;
+
+            usleep(150000);
         }
     }
     else if (indicator->pid > 0)
@@ -151,15 +164,16 @@ int indicator_start(progress_indicator *indicator)
 void indicator_set_text(progress_indicator *indicator, char *text)
 {
 
-    free(indicator->text);
-    indicator->text = strdup(text);
+    memcpy(indicator->text, text, strlen(text));
+    indicator->text[strlen(text)] = '\0';
+
 
 }
 void indicator_stop(progress_indicator *indicator)
 {
 
-    kill(indicator->pid, SIGTERM);
-    indicator->is_stopped = 1;
+    indicator->is_stopped = kill(indicator->pid, SIGTERM) + 1;
+    putc('\n', stdout);
 
 }
 void indicator_destroy(progress_indicator *indicator)
@@ -171,3 +185,11 @@ void indicator_destroy(progress_indicator *indicator)
 }
 
 /* Here ends the part of progress indicator */
+
+void *create_shared_memory(size_t size) {
+
+  int protection = PROT_READ | PROT_WRITE;
+  int visibility = MAP_SHARED | MAP_ANONYMOUS;
+  return mmap(NULL, size, protection, visibility, -1, 0);
+
+}
