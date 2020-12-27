@@ -106,3 +106,6 @@ Output:
 see the `progress_bar_test.c` for more code.
 In the `progress_bar_test.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
 In reallity this wont happen and its only in the code to show the ability to resize the bar.
+
+To run the sample code:
+`make run`

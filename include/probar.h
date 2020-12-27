@@ -24,7 +24,7 @@ typedef struct __progress_indicator {
 
 } progress_indicator;
 
-/* See README.md for more info */
+/* See examples/BasicProgressBar/README.md for more info */
 progress_bar *bar_create(unsigned int term_width, char indicator, char *text);
 void bar_set_progress(progress_bar *bar, unsigned int progress);
 int bar_print(progress_bar *bar);
@@ -33,6 +33,7 @@ unsigned int bar_get_progress(progress_bar *bar);
 void bar_set_text(progress_bar *bar, char *text);
 void bar_destroy(progress_bar *bar);
 
+/* See examples/ProgressIndicatorCircle/README.md for more info */
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size);
 int indicator_start(progress_indicator *indicator);
 void indicator_set_text(progress_indicator *indicator, char *text);

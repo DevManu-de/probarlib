@@ -3,56 +3,36 @@ The progress indicator circle prints a text and a rotating aimantion. More infor
 
 # Explanation of functions
 
-## bar_create()
+## indicator_create()
 > 
 > 1. Argument 
 > is the width of the terminal in characters. (How many characters fit in one row)
-> IMPORTANT this cant be smaller than `strlen(text) + 17` because if it is then the bar itself would have a negative width.
-> The 17 from the calculation comes from the 10 spaces between the text and 3 for the percentage and the other 4 from the %, a space and the [] around the bar.
+> This must be larger than the text
 > 
 > 2. Argument
-> is the indicator, this char shows the progress. (Example: [#######        ] The # is the indicator in this bar example)
+> is the text that is diplayed in front of the circle.
 > 
 > 3. Argument
-> is the text that is diplayed in front of the bar.
-> 
+> is the max length that the text will ever get.
+>
 > Return value
-> it returns a pointer to a progress bar structure.
+> it returns a pointer to a progress indicator structure.
 
-## bar_set_progress()
+## indicator_set_width()
 > 
 > 1. Argument
-> is the pointer to the progress bar.
+> is the progress indicator.
 > 
 > 2. Argument
-> is the percentage of completion as an unsigned integer.
+> is the width of the terminal in characters. (How many characters fit in one row)
 > 
 > Return value
 > NONE (void)
 
-## bar_print()
+## indicator_set_text()
 > 
 > 1. Argument
-> is the bar to print.
-> 
-> Return value
-> is 0 on succes.
-
-## bar_set_width()
-> 
-> 1. Argument
-> is the bar.
-> 
-> 2. Argument
-> is the width of the terminal in characters. (How many characters fit in one row)
-> 
-> Return value
-> 0 on success but -1 if term_width is not large enough.
-
-## bar_set_text()
-> 
-> 1. Argument
-> is the bar.
+> is the progress indicator.
 > 
 > 2. Argument
 > is the new text.
@@ -60,62 +40,49 @@ The progress indicator circle prints a text and a rotating aimantion. More infor
 > Return value
 > NULL (void)
 
-## bar_get_progress()
-> 
+## indicator_stop()
+>
 > 1. Argument
-> is the bar.
-> 
+> is the progress indicator.
+>
 > Return value
-> the percentage of the bar.
+> NULL (void)
 
-## bar_destroy()
+## indicator_destroy()
 > 
 > 1. Argument
-> is the bar.
+> is the progress indicator.
 > 
 > Return value
 > NONE (void)
 
 ## Usage
 
-A example similar to the one in `src/main.c`
+A example similar to the one in `progress_indicator_test.c`
 
 ```
-int screen_width = 210;
+progress_indicator *indicator = indicator_create(50, "A sample text", 20);
 
-progress *bar = bar_create(screen_width, '#', "Sample text");
+/* Start the progress indicator */
+indicator_start(indicator);
 
-int i;
-for (i = 0; i < 101; ++i)
-{
-    /* Do stuff and update screen_width to be able to recognize terminal size changes */
-    bar_set_width(bar, screen_width);
-    bar_set_progress(bar, i);
-    bar_print(bar);
-}
+/* Set a new text */
+indicator_set_text(indicator, "Progress 1");
 
-/* This ends the bar */
-putc('\n', stdout);
+/* Change the width of the row */
+indicator_set_width(indicator, 210);
 
-/* Destroys the bar */
-bar_destroy(bar);
+/* Stop the progress indicator but not dealloc it */
+indicator_stop(indicator);
+
+/* Deallocs the progress indicator */
+indicator_destroy(indicator);
 ```
 Output:
-`Sample text          0% [                               ]`
+`A sample text          \`
 
-see the `src/main.c` for more code.
-In the `src/main.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
-In reallity this wont happen and its only in the code to show the ability to resize the bar.
+see the `progress_indicator_test.c` for more code.
+IMPORTANT: everything that needs to be printed after indicator_start() was called must be done with indicator_set_text().
 
-## Test the different bars
-
-Available bars are: progress_bar, progress_indicator
-
-To test the progress_bar
-`make progress_bar_test`
-Tp test the progress_indicator
-`make progress_indicator_test`
-
-
-
-
+To run the sample code:
+`make run`

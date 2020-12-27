@@ -114,8 +114,7 @@ progress_indicator *indicator_create(unsigned int term_width, char *text, unsign
     indicator->term_width[0] = term_width;
     indicator->max_text_size = max_text_size;
     indicator->text = create_shared_memory(indicator->max_text_size);
-    memcpy(indicator->text, text, strlen(text));
-    indicator->text[strlen(indicator->text)] = '\0';
+    memcpy(indicator->text, text, strlen(text) + 1);
     indicator->pid = 0;
     indicator->is_stopped = 0;
     return indicator;
@@ -166,8 +165,7 @@ int indicator_start(progress_indicator *indicator)
 void indicator_set_text(progress_indicator *indicator, char *text)
 {
 
-    memcpy(indicator->text, text, strlen(text));
-    indicator->text[strlen(text)] = '\0';
+    memcpy(indicator->text, text, strlen(text) + 1);
 
 
 }
