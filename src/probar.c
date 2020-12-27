@@ -1,11 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "probar.h"
 
+/* Here begins the part of progress bar */
 progress_bar *bar_create(unsigned int term_width, char indicator, char *text)
 {
     progress_bar *bar = malloc(sizeof(progress_bar));
@@ -97,3 +100,64 @@ void bar_destroy(progress_bar *bar)
 {
     free(bar);
 }
+
+/* Here ends the part of progress bar */
+
+/* Here begins the part of progress indicator */
+progress_indicator *indicator_create(unsigned int term_width, char *text)
+{
+    progress_indicator *indicator = malloc(sizeof(progress_indicator));
+    indicator->term_width = term_width;
+    indicator->text = strdup(text);
+    indicator->pid = 0;
+    return indicator;
+}
+
+int indicator_start(progress_indicator *indicator)
+{
+    indicator->pid = fork();
+    unsigned int text_indicator_gap = indicator->term_width - strlen(indicator->text) - 1;
+    if (indicator->pid == 0)
+    {
+        printf("%d", indicator->pid);
+        exit(0);
+        /* This is the child */
+        printf("%s", indicator->text);
+        unsigned int i;
+        for (i = 0; i < text_indicator_gap; ++i)
+        {
+            putc(' ', stdout);
+        }
+        putc('|', stdout);
+
+    }
+    else if (indicator->pid > 0)
+    {
+        /* This is its parent */
+
+    } else
+    {
+        /* Something failed */
+        return -1;
+
+    }
+
+    return 0;
+}
+void indicator_set_text();
+void indicator_stop(progress_indicator *indicator)
+{
+
+    kill(indicator->pid, SIGTERM);
+    indicator->pid = 0;
+
+}
+void indicator_destroy(progress_indicator *indicator)
+{
+    if (indicator->pid > 0)
+        kill(indicator->pid, SIGTERM);
+    free(indicator);
+
+}
+
+/* Here ends the part of progress indicator */

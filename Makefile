@@ -50,6 +50,15 @@ clean:
 	$(RM) $(call FIXPATH,$(OBJECTS))
 	@echo Cleanup complete!
 
-run: all
-	./$(OUTPUTMAIN)
-	@echo Executing "run: all" complete!
+
+progress_bar_test:
+	$(CC) $(CFLAGS) -c src/probar.c -o src/probar.o $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) src/progress_bar_test.c $(INCLUDES) -o $(OUTPUT)/progress_bar_test src/probar.o $(LFLAGS) $(LIBS)
+	./$(OUTPUT)/progress_bar_test
+	@echo progress_bar_test is done
+
+progress_indicator_test:
+	$(CC) $(CFLAGS) -c src/probar.c -o src/probar.o $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) src/progress_indicator_test.c $(INCLUDES) -o $(OUTPUT)/progress_indicator_test src/probar.o $(LFLAGS) $(LIBS)
+	./$(OUTPUT)/progress_indicator_test
+	@echo progress_indicator_test is done

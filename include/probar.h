@@ -3,7 +3,9 @@
 #ifndef _PROBAR_H
 #define _PROBAR_H
 
-typedef struct {
+#include <unistd.h>
+
+typedef struct __progress_bar {
 
     unsigned int term_width;
     char indicator;
@@ -11,6 +13,14 @@ typedef struct {
     unsigned int progress;
 
 } progress_bar;
+
+typedef struct __progress_indicator {
+
+    unsigned int term_width;
+    char *text;
+    pid_t pid;
+
+} progress_indicator;
 
 /* See README.md for more info */
 progress_bar *bar_create(unsigned int term_width, char indicator, char *text);
@@ -20,5 +30,11 @@ void bar_set_width(progress_bar *bar, unsigned int term_width);
 unsigned int bar_get_progress(progress_bar *bar);
 void bar_set_text(progress_bar *bar, char *text);
 void bar_destroy(progress_bar *bar);
+
+progress_indicator *indicator_create(unsigned int term_width, char *text);
+int indicator_start(progress_indicator *indicator);
+void indicator_set_text();
+void indicator_stop(progress_indicator *indicator);
+void indicator_destroy(progress_indicator *indicator);
 
 #endif

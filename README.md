@@ -120,3 +120,16 @@ Output:
 see the `src/main.c` for more code.
 In the `src/main.c` the bar resizes at 50% and leaves some `#` on the screen but this only occurs if you dont actually resize the terminal.
 In reallity this wont happen and its only in the code to show the ability to resize the bar.
+
+## Test the different bars
+
+Available bars are: progress_bar, progress_indicator
+
+To test the progress_bar
+`make progress_bar_test`
+Tp test the progress_indicator
+`make progress_indicator_test`
+
+
+
+
