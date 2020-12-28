@@ -17,7 +17,7 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 > is the text that is diplayed in front of the bar.
 > 
 > Return value
-> it returns a pointer to a progress bar structure. NULL on memory allocation fail.
+> it returns a pointer to a progress bar structure.
 
 ## bar_set_progress()
 > 

@@ -6,7 +6,7 @@ I chose not to get the terminal width dynamically because it could cause some un
 You already have a project that collects the width of the terminal so it is unnecessary to collect it again.
 Another example:
 You want the bar only to take half of the terminal.
-And dynamically collecting the terminal size would result in a dependency like ncurses.
+But if you dont have a function that returns the terminal width dont worry there is already one built in called `get_term_width()`
 
 BTW probarlib is C89 compatible but not windows only linux is tested and supported
 

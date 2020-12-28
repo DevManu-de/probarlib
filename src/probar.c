@@ -26,6 +26,8 @@ unsigned int get_term_width()
 progress_bar *bar_create(unsigned int term_width, char indicator, char *text)
 {
     progress_bar *bar = malloc(sizeof(progress_bar));
+    if (bar == NULL)
+        return NULL;
     bar->indicator = indicator;
     bar->progress = 0;
     bar->term_width = term_width;
@@ -121,6 +123,8 @@ void bar_destroy(progress_bar *bar)
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size)
 {
     progress_indicator *indicator = malloc(sizeof(progress_indicator));
+    if (indicator == NULL)
+        return NULL;
     /* Create a shared memory for the child to react to terminal changes*/
     indicator->term_width = create_shared_memory(sizeof(int));
     indicator->term_width[0] = term_width;
@@ -205,7 +209,7 @@ void indicator_set_width(progress_indicator *indicator, unsigned int term_width)
 
 }
 
-void indicator_stop(progress_indicator *indicator)
+int indicator_stop(progress_indicator *indicator)
 {
     /* Kill the child and set is_stopped.
      * On successful kill kill returns 0.
@@ -213,6 +217,8 @@ void indicator_stop(progress_indicator *indicator)
      * so is_stopped always has the correct value */
     indicator->is_stopped = kill(indicator->pid, SIGTERM) + 1;
     putc('\n', stdout);
+
+    return indicator->is_stopped;
 
 }
 void indicator_destroy(progress_indicator *indicator)
@@ -230,6 +236,60 @@ void indicator_destroy(progress_indicator *indicator)
 }
 
 /* Here ends the part of progress indicator */
+
+/* Here starts the part of complex progress bar */
+
+
+complex_progress_bar *complex_bar_create()
+{
+    complex_progress_bar *cbar = malloc(sizeof(complex_progress_bar));
+    return cbar == NULL ? NULL : cbar;
+
+}
+
+
+int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term_width, char *text,
+                                   char left_bar_border, char indicator,
+                                   char head, char unfinished,
+                                   char right_bar_border, unsigned int eta,
+                                   unsigned int text_bar_gaps, char *positioning)
+{
+
+    cbar->term_width = term_width;
+    cbar->text = strdup(text);
+    cbar->progress = 0;
+    cbar->bar.left_bar_boder = left_bar_border;
+    cbar->bar.indicator = indicator;
+    cbar->bar.head = head;
+    cbar->bar.unfinished = unfinished;
+    cbar->bar.right_bar_border = right_bar_border;
+    cbar->eta = eta;
+    cbar->text_bar_gaps = text_bar_gaps;
+    cbar->positioning = strdup(positioning);
+
+    return cbar->text != NULL && cbar->positioning != NULL ? 0 : -1;
+}
+
+void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress)
+{
+
+    cbar->progress = progress;
+
+}
+
+int complex_bar_print(complex_progress_bar *cbar)
+{
+
+   
+
+}
+
+void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);
+int complex_bar_set_text(complex_progress_bar *cbar, char *text);
+int complex_bar_get_progress(complex_progress_bar *cbar);
+void complex_bar_destroy(complex_progress_bar *cbar);
+
+/* Here ends the part of complex progress bar */
 
 void *create_shared_memory(size_t size) {
 

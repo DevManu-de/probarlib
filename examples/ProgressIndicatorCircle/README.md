@@ -16,7 +16,7 @@ The progress indicator circle prints a text and a rotating aimantion. More infor
 > is the max length that the text will ever get.
 >
 > Return value
-> it returns a pointer to a progress indicator structure.
+> it returns a pointer to a progress indicator structure. NULL on memory allocation fail.
 
 ## indicator_start()
 >
@@ -54,7 +54,7 @@ The progress indicator circle prints a text and a rotating aimantion. More infor
 > is the progress indicator.
 >
 > Return value
-> NULL (void)
+> is 1 if child killing was succesful. 0 if child killing was unsuccessful.
 
 ## indicator_destroy()
 > 
