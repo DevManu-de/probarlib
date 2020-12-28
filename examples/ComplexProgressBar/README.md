@@ -8,6 +8,42 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 > Return value
 > it returns a pointer to a progress bar structure.
 
+## complex_bar_set_bar_attributes()
+>
+>
+> 1. Argument
+> is the bar.
+>
+> 2. Argument
+> is the width of the entire bar. 0 means dynamically resize complex_bar_set_width() is never required then.
+>
+> 3. Argument
+> is the text to be displayed in front of the bar.
+>
+> 4. Argument
+> is the left bar border
+>
+> 5. Argument
+> is the indicator that shows the progress
+>
+> 6. Argument
+> is the head in front of the indicator
+>
+> 7. Argument
+> is the character between the head and the right bar border
+>
+> 8. Argument
+> is the right bar border
+>
+> 9. Argument
+> is ETA. 1 means calculate ETA. 0 means dont calculate ETA.
+>
+> 10. Argument
+> is the space between text and the percentage
+>
+> Return value
+> 0 on success, -1 on strdup fail.
+
 ## complex_bar_set_progress()
 > 
 > 1. Argument
@@ -70,8 +106,6 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 A example similar to the one in `complex_progress_bar_test.c`
 
 ```
-int screen_width = 210;
-
 progress *bar = complex_bar_create();
 /* set cbar, 0 = automatic resizeing, text, left bar border, indicator, head, char between head and right bar border, right bar border, if ETA should be calculated, space between text and percentage */
 complex_bar_set_bar_attributes(bar, 0, "Text", '(', '$', '>', '=', ' )', 0, 1);
