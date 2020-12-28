@@ -7,15 +7,6 @@
 
 unsigned int get_term_width();
 
-typedef struct __progress_bar {
-
-    unsigned int term_width;
-    char indicator;
-    char *text;
-    unsigned int progress;
-
-} progress_bar;
-
 typedef struct __progress_indicator {
 
     unsigned int *term_width;
@@ -48,13 +39,14 @@ typedef struct __complex_progress_bar {
 } complex_progress_bar;
 
 /* See examples/BasicProgressBar/README.md for more info */
-progress_bar *bar_create(unsigned int term_width, char indicator, char *text);
-void bar_set_progress(progress_bar *bar, unsigned int progress);
-int bar_print(progress_bar *bar);
-void bar_set_width(progress_bar *bar, unsigned int term_width);
-unsigned int bar_get_progress(progress_bar *bar);
-void bar_set_text(progress_bar *bar, char *text);
-void bar_destroy(progress_bar *bar);
+typedef complex_progress_bar basic_progress_bar;
+#define basic_bar_create() complex_bar_create()
+#define basic_bar_set_bar_attributes(bbar_pntr, text) complex_bar_set_bar_attributes(bbar_pntr, 0, text, '[', '#', ' ', ' ', ']', 0, 10)
+#define basic_bar_set_progress(bbar_pntr, progress) complex_bar_set_progress(bbar_pntr, progress)
+#define basic_bar_print(bbar_pntr) complex_bar_print(bbar_pntr)
+#define basic_bar_set_text(bbar_pntr, text) complex_bar_set_text(bbar_pntr, text)
+#define basic_bar_get_progress(bbar_pntr) complex_bar_get_progress(bbar_pntr)
+#define basic_bar_destroy(bbar_pntr) complex_bar_destroy(bbar_pntr)
 
 /* See examples/ProgressIndicatorCircle/README.md for more info */
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size);
@@ -74,7 +66,7 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
 void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress);
 int complex_bar_print(complex_progress_bar *cbar);
 void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);
-int complex_bar_set_text(complex_progress_bar *cbar, char *text);
+void complex_bar_set_text(complex_progress_bar *cbar, char *text);
 int complex_bar_get_progress(complex_progress_bar *cbar);
 void complex_bar_destroy(complex_progress_bar *cbar);
 

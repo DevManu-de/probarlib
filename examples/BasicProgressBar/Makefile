@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS := -Wall -Wextra -std=gnu89 -g
 SRC := ../../src/
 INCLUDES := -I ../../include
-NAME := progress_bar_test
+NAME := basic_progress_bar_test
 
 
 run:

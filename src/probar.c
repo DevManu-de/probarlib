@@ -21,104 +21,6 @@ unsigned int get_term_width()
 
 }
 
-
-/* Here begins the part of progress bar */
-progress_bar *bar_create(unsigned int term_width, char indicator, char *text)
-{
-    progress_bar *bar = malloc(sizeof(progress_bar));
-    if (bar == NULL)
-        return NULL;
-    bar->indicator = indicator;
-    bar->progress = 0;
-    bar->term_width = term_width;
-    bar->text = strdup(text);
-
-    return bar;
-
-}
-void bar_set_progress(progress_bar *bar, unsigned int progress)
-{
-    bar->progress = progress;
-
-}
-
-void bar_set_width(progress_bar *bar, unsigned int term_width)
-{
-    bar->term_width = term_width;
-
-}
-
-int bar_print(progress_bar *bar)
-{
-
-    /* Check if term_width is large enough */
-    if ((int) (bar->term_width - strlen(bar->text) - 17) <= 0)
-        return -1;
-    /* This is only the bar it self */
-    unsigned int bar_width = bar->term_width - strlen(bar->text) - 17;
-    /* This is how much one indicator affects the progress */
-    float chars_per_iter = (float) bar_width / 100;
-    float chars = 0.0;
-    unsigned int chars_printed = 0;
-
-    /* Print the first part of the  */
-    printf("\r%s          %3d%% [", bar->text, bar->progress);
-    unsigned int i;
-    for (i = 0; i < bar->progress; i++)
-    {
-        chars += chars_per_iter;
-        /* Only print characters if 1 char is 1 char in the terminal  */
-        if (chars >= 1)
-        {
-            int j;
-            for (j = 0; j < chars; j++)
-            {
-                printf("%c", bar->indicator);
-                chars--;
-                chars_printed++;
-            }
-        }
-    }
-
-    /* In some cases the bar doesnt completely fill because the last char is not >= 1 */
-    if (chars_printed < bar_width)
-    {
-        putc(bar->indicator, stdout);
-        chars_printed++;
-    }
-
-    /* Prints the remaining whitespaces  */
-    for (i = 0; i < bar_width - chars_printed; i++)
-    {
-        putc(' ', stdout);
-    }
-    /* End the bar and flush stdout */
-    putc(']', stdout);
-    fflush(stdout);
-    return 0;
-
-}
-
-void bar_set_text(progress_bar *bar, char *text)
-{
-    free(bar->text);
-    bar->text = strdup(text);
-
-}
-
-
-unsigned int bar_get_progress(progress_bar *bar)
-{
-    return bar->progress;
-}
-
-void bar_destroy(progress_bar *bar)
-{
-    free(bar);
-}
-
-/* Here ends the part of progress bar */
-
 /* Here begins the part of progress indicator */
 progress_indicator *indicator_create(unsigned int term_width, char *text, unsigned int max_text_size)
 {
@@ -279,28 +181,35 @@ void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress)
 
 int complex_bar_print(complex_progress_bar *cbar)
 {
+    /* Determine if automatic resizing is used */
     int term_width;
     if (cbar->term_width == 0)
         term_width = get_term_width();
     else
         term_width = cbar->term_width;
 
+    /* Get with of only the bar.        The 7 comes from the percentage (3 characters) a %, a space and the bar borders */
     unsigned int bar_width = (unsigned int) (term_width - strlen(cbar->text) - cbar->text_bar_gap - 7 /* - ETA */);
     if (bar_width <= 0)
         return -1;
 
+    /* Calculate how much 1% affects the bar in real */
     float chars_per_iter = (float) bar_width / 100;
     float chars = 0.0;
     unsigned int chars_printed = 0;
 
+    /* Print text */
     printf("\r%s", cbar->text);
 
+    /* Print the spaces between text and percentage */
     unsigned int i;
     for (i = 0; i < cbar->text_bar_gap; ++i)
         putc(' ', stdout);
+    /* Print percentage, % and left bar border */
     printf("%3d%% %c", cbar->progress, cbar->bar.left_bar_boder);
     for (i = 0; i < cbar->progress; ++i)
     {
+        /* Only print if 1 charater in real is == to one in the bar */
         chars += chars_per_iter;
         while (chars >= 1)
         {
@@ -310,14 +219,15 @@ int complex_bar_print(complex_progress_bar *cbar)
         }
     }
 
+    /* Print the head of the progress bar or the final indicator */
     if (cbar->progress < 100)
         putc(cbar->bar.head, stdout);
     else
         putc(cbar->bar.indicator, stdout);
 
+    /* Print spaces between the head and the right bar border */
     for (i = 0; i < bar_width - (chars_printed + 1); ++i)
         putc(cbar->bar.unfinished, stdout);
-
     putc(cbar->bar.right_bar_border, stdout);
 
     /* ETA goes here */
@@ -327,9 +237,25 @@ int complex_bar_print(complex_progress_bar *cbar)
     return 0;
 }
 
-void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);
-int complex_bar_set_text(complex_progress_bar *cbar, char *text);
-int complex_bar_get_progress(complex_progress_bar *cbar);
+void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width)
+{
+
+    cbar->term_width = width;
+
+}
+void complex_bar_set_text(complex_progress_bar *cbar, char *text)
+{
+
+    cbar->text = realloc(cbar->text, strlen(text) + 1);
+    strcpy(cbar->text, text);
+
+}
+int complex_bar_get_progress(complex_progress_bar *cbar)
+{
+
+    return cbar->progress;
+
+}
 void complex_bar_destroy(complex_progress_bar *cbar)
 {
     free(cbar->text);
