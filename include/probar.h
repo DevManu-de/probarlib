@@ -41,7 +41,7 @@ typedef struct __complex_progress_bar {
 
     } bar;
     unsigned int eta : 1;
-    unsigned int text_bar_gaps;
+    unsigned int text_bar_gap;
     char *positioning;
 
 
@@ -70,7 +70,7 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
                                     char left_bar_border, char indicator,
                                     char head, char unfinished,
                                     char right_bar_border, unsigned int eta,
-                                    unsigned int text_bar_gaps, char *positioning);
+                                    unsigned int text_bar_gap);
 void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress);
 int complex_bar_print(complex_progress_bar *cbar);
 void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);

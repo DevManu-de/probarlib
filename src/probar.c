@@ -252,7 +252,7 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
                                    char left_bar_border, char indicator,
                                    char head, char unfinished,
                                    char right_bar_border, unsigned int eta,
-                                   unsigned int text_bar_gaps, char *positioning)
+                                   unsigned int text_bar_gap)
 {
 
     cbar->term_width = term_width;
@@ -264,8 +264,8 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
     cbar->bar.unfinished = unfinished;
     cbar->bar.right_bar_border = right_bar_border;
     cbar->eta = eta;
-    cbar->text_bar_gaps = text_bar_gaps;
-    cbar->positioning = strdup(positioning);
+    cbar->text_bar_gap = text_bar_gap;
+    //cbar->positioning = strdup(positioning);
 
     return cbar->text != NULL && cbar->positioning != NULL ? 0 : -1;
 }
@@ -279,15 +279,63 @@ void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress)
 
 int complex_bar_print(complex_progress_bar *cbar)
 {
+    int term_width;
+    if (cbar->term_width == 0)
+        term_width = get_term_width();
+    else
+        term_width = cbar->term_width;
 
-   
+    unsigned int bar_width = (unsigned int) (term_width - strlen(cbar->text) - cbar->text_bar_gap - 7 /* - ETA */);
+    if (bar_width <= 0)
+        return -1;
 
+    float chars_per_iter = (float) bar_width / 100;
+    float chars = 0.0;
+    unsigned int chars_printed = 0;
+
+    printf("\r%s", cbar->text);
+
+    unsigned int i;
+    for (i = 0; i < cbar->text_bar_gap; ++i)
+        putc(' ', stdout);
+    printf("%3d%% %c", cbar->progress, cbar->bar.left_bar_boder);
+    for (i = 0; i < cbar->progress; ++i)
+    {
+        chars += chars_per_iter;
+        while (chars >= 1)
+        {
+            putc(cbar->bar.indicator, stdout);
+            chars--;
+            chars_printed++;
+        }
+    }
+
+    if (cbar->progress < 100)
+        putc(cbar->bar.head, stdout);
+    else
+        putc(cbar->bar.indicator, stdout);
+
+    for (i = 0; i < bar_width - (chars_printed + 1); ++i)
+        putc(cbar->bar.unfinished, stdout);
+
+    putc(cbar->bar.right_bar_border, stdout);
+
+    /* ETA goes here */
+
+    fflush(stdout);
+
+    return 0;
 }
 
 void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);
 int complex_bar_set_text(complex_progress_bar *cbar, char *text);
 int complex_bar_get_progress(complex_progress_bar *cbar);
-void complex_bar_destroy(complex_progress_bar *cbar);
+void complex_bar_destroy(complex_progress_bar *cbar)
+{
+    free(cbar->text);
+    free(cbar);
+
+}
 
 /* Here ends the part of complex progress bar */
 
