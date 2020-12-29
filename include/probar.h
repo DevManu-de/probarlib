@@ -45,7 +45,7 @@ typedef struct __complex_progress_bar {
 /* See examples/BasicProgressBar/README.md for more info */
 typedef complex_progress_bar basic_progress_bar;
 #define basic_bar_create() complex_bar_create()
-#define basic_bar_set_bar_attributes(bbar_pntr, text) complex_bar_set_bar_attributes(bbar_pntr, 0, text, '[', '#', ' ', ' ', ']', 0, 10)
+#define basic_bar_set_bar_attributes(bbar_pntr, text) complex_bar_set_bar_attributes(bbar_pntr, 0, text, '[', '#', ' ', ' ', ']', 0, 10, 100)
 #define basic_bar_set_progress(bbar_pntr, progress) complex_bar_set_progress(bbar_pntr, progress)
 #define basic_bar_print(bbar_pntr) complex_bar_print(bbar_pntr)
 #define basic_bar_set_text(bbar_pntr, text) complex_bar_set_text(bbar_pntr, text)
