@@ -189,25 +189,25 @@ int complex_bar_print(complex_progress_bar *cbar)
         term_width = cbar->term_width;
 
     /* Get with of only the bar.        The 7 comes from the percentage (3 characters) a %, a space and the bar borders */
-    unsigned int bar_width = (unsigned int) (term_width - strlen(cbar->text) - cbar->text_bar_gap - 7 /* - ETA */);
+    int bar_width = (unsigned int) (term_width - strlen(cbar->text) - cbar->text_bar_gap - 7 /* - ETA */);
     if (bar_width <= 0)
         return -1;
 
     /* Calculate how much 1% affects the bar in real */
     float chars_per_iter = (float) bar_width / 100;
     float chars = 0.0;
-    unsigned int chars_printed = 0;
+    int chars_printed = 0;
 
     /* Print text */
     printf("\r%s", cbar->text);
 
     /* Print the spaces between text and percentage */
-    unsigned int i;
-    for (i = 0; i < cbar->text_bar_gap; ++i)
+    int i;
+    for (i = 0; i < (int) cbar->text_bar_gap; ++i)
         putc(' ', stdout);
     /* Print percentage, % and left bar border */
     printf("%3d%% %c", cbar->progress, cbar->bar.left_bar_boder);
-    for (i = 0; i < cbar->progress; ++i)
+    for (i = 0; i < (int) cbar->progress; ++i)
     {
         /* Only print if 1 charater in real is == to one in the bar */
         chars += chars_per_iter;
@@ -222,8 +222,6 @@ int complex_bar_print(complex_progress_bar *cbar)
     /* Print the head of the progress bar or the final indicator */
     if (cbar->progress < 100)
         putc(cbar->bar.head, stdout);
-    else
-        putc(cbar->bar.indicator, stdout);
 
     /* Print spaces between the head and the right bar border */
     for (i = 0; i < bar_width - (chars_printed + 1); ++i)
