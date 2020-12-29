@@ -41,8 +41,28 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 > 10. Argument
 > is the space between text and the percentage
 >
+> 11. Argument
+> is the max value the bar can get.
+>
 > Return value
 > 0 on success, -1 on strdup fail.
+
+## complex_bar_start_eta()
+>
+> 1. Argument
+> is the bar.
+>
+> Return value
+> NONE (void)
+
+## complex_bar_get_duration()
+>
+> 1. Argument
+> is the bar.
+>
+> Return value
+> is the seconds (double) from complex_bar_start_eta() to 100% of the bar.
+> The precision is +1 seconds on max_value == 1000
 
 ## complex_bar_set_progress()
 > 
@@ -107,8 +127,8 @@ A example similar to the one in `complex_progress_bar_test.c`
 
 ```
 progress *bar = complex_bar_create();
-/* set cbar, 0 = automatic resizeing, text, left bar border, indicator, head, char between head and right bar border, right bar border, if ETA should be calculated, space between text and percentage */
-complex_bar_set_bar_attributes(bar, 0, "Text", '(', '$', '>', '=', ' )', 0, 1);
+/* set cbar, 0 = automatic resizeing, text, left bar border, indicator, head, char between head and right bar border, right bar border, if ETA should be calculated, space between text and percentage, max value */
+complex_bar_set_bar_attributes(bar, 0, "Text", '(', '$', '>', '=', ' )', 0, 1, 100);
 
 int i;
 for (i = 0; i < 101; ++i)
@@ -125,7 +145,7 @@ putc('\n', stdout);
 complex_bar_destroy(bar);
 ```
 Output:
-`Text 90% ($$$$$$$$$> )`
+`Text 90% ($$$$$$$$$>===)`
 
 see the `complex_progress_bar_test.c` for more code.
 

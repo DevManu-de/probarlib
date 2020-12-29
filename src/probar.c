@@ -154,7 +154,7 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
                                    char left_bar_border, char indicator,
                                    char head, char unfinished,
                                    char right_bar_border, unsigned int eta,
-                                   unsigned int text_bar_gap)
+                                   unsigned int text_bar_gap, unsigned int max_value)
 {
 
     cbar->term_width = term_width;
@@ -167,9 +167,23 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
     cbar->bar.right_bar_border = right_bar_border;
     cbar->eta = eta;
     cbar->text_bar_gap = text_bar_gap;
-    //cbar->positioning = strdup(positioning);
+    cbar->max_value = max_value;
 
     return cbar->text != NULL && cbar->positioning != NULL ? 0 : -1;
+}
+
+void complex_bar_start_eta(complex_progress_bar *cbar)
+{
+
+    cbar->ETA_START = time(NULL);
+
+}
+
+double complex_bar_get_duration(complex_progress_bar *cbar)
+{
+
+    return difftime(cbar->ETA_STOP, cbar->ETA_START);
+
 }
 
 void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress)
@@ -181,6 +195,10 @@ void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress)
 
 int complex_bar_print(complex_progress_bar *cbar)
 {
+
+    if (cbar->progress == cbar->max_value)
+        cbar->ETA_STOP = time(NULL);
+
     /* Determine if automatic resizing is used */
     int term_width;
     if (cbar->term_width == 0)
@@ -190,11 +208,15 @@ int complex_bar_print(complex_progress_bar *cbar)
 
     /* Get with of only the bar.        The 7 comes from the percentage (3 characters) a %, a space and the bar borders */
     int bar_width = (unsigned int) (term_width - strlen(cbar->text) - cbar->text_bar_gap - 7 /* - ETA */);
+    if (cbar->eta != 0)
+        bar_width -= 11;
+
     if (bar_width <= 0)
         return -1;
 
+    //unsigned int cbar->max_value = cbar->max_value;
     /* Calculate how much 1% affects the bar in real */
-    float chars_per_iter = (float) bar_width / 100;
+    float chars_per_iter = (float) bar_width / cbar->max_value;
     float chars = 0.0;
     int chars_printed = 0;
 
@@ -206,7 +228,7 @@ int complex_bar_print(complex_progress_bar *cbar)
     for (i = 0; i < (int) cbar->text_bar_gap; ++i)
         putc(' ', stdout);
     /* Print percentage, % and left bar border */
-    printf("%3d%% %c", cbar->progress, cbar->bar.left_bar_boder);
+    printf("%3.0f%% %c", ((float) cbar->progress / (float) cbar->max_value) * 100, cbar->bar.left_bar_boder);
     for (i = 0; i < (int) cbar->progress; ++i)
     {
         /* Only print if 1 charater in real is == to one in the bar */
@@ -220,8 +242,11 @@ int complex_bar_print(complex_progress_bar *cbar)
     }
 
     /* Print the head of the progress bar or the final indicator */
-    if (cbar->progress < 100)
+    if (cbar->progress < cbar->max_value)
         putc(cbar->bar.head, stdout);
+    else
+        if (chars_per_iter >= 1)
+            putc(cbar->bar.indicator, stdout);
 
     /* Print spaces between the head and the right bar border */
     for (i = 0; i < bar_width - (chars_printed + 1); ++i)
@@ -229,6 +254,24 @@ int complex_bar_print(complex_progress_bar *cbar)
     putc(cbar->bar.right_bar_border, stdout);
 
     /* ETA goes here */
+    if (cbar->eta != 0)
+    {
+        if (cbar->progress == 0)
+            printf(" 0h 0m 0s");
+        else
+        {
+            double time_difference = difftime(time(NULL), cbar->ETA_START);
+            double max_time = cbar->max_value * time_difference / cbar->progress;
+            long time_prediction = (max_time - time_difference);
+            int hours = time_prediction / 3600;
+            time_prediction %= 3600;
+            int min = time_prediction / 60;
+            time_prediction %= 60;
+            int sec = time_prediction;
+
+            printf("%02dh %02dm %02ds", hours, min, sec);
+        }
+    }
 
     fflush(stdout);
 

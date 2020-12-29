@@ -3,6 +3,7 @@
 #ifndef _PROBAR_H
 #define _PROBAR_H
 
+#include <time.h>
 #include <unistd.h>
 
 unsigned int get_term_width();
@@ -21,6 +22,7 @@ typedef struct __complex_progress_bar {
 
     unsigned int term_width;
     char *text;
+    unsigned int max_value;
     unsigned int progress;
     struct {
 
@@ -32,6 +34,8 @@ typedef struct __complex_progress_bar {
 
     } bar;
     unsigned int eta : 1;
+    time_t ETA_START;
+    time_t ETA_STOP;
     unsigned int text_bar_gap;
     char *positioning;
 
@@ -62,7 +66,9 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
                                     char left_bar_border, char indicator,
                                     char head, char unfinished,
                                     char right_bar_border, unsigned int eta,
-                                    unsigned int text_bar_gap);
+                                   unsigned int text_bar_gap, unsigned int max_value);
+void complex_bar_start_eta(complex_progress_bar *cbar);
+double complex_bar_get_duration(complex_progress_bar *cbar);
 void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress);
 int complex_bar_print(complex_progress_bar *cbar);
 void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);
