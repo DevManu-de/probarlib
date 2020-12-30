@@ -72,7 +72,7 @@ double complex_bar_get_duration(complex_progress_bar *cbar);
 void complex_bar_set_progress(complex_progress_bar *cbar, unsigned int progress);
 int complex_bar_print(complex_progress_bar *cbar);
 void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width);
-void complex_bar_set_text(complex_progress_bar *cbar, char *text);
+void complex_bar_set_text(complex_progress_bar *cbar, char *fromat, ...);
 int complex_bar_get_progress(complex_progress_bar *cbar);
 void complex_bar_destroy(complex_progress_bar *cbar);
 

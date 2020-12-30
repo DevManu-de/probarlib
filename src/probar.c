@@ -2,6 +2,7 @@
 
 #include <sys/mman.h>
 #include <signal.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -158,7 +159,8 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
 {
 
     cbar->term_width = term_width;
-    cbar->text = strdup(text);
+    cbar->text = malloc(get_term_width());
+    complex_bar_set_text(cbar, text);
     cbar->progress = 0;
     cbar->bar.left_bar_boder = left_bar_border;
     cbar->bar.indicator = indicator;
@@ -245,7 +247,7 @@ int complex_bar_print(complex_progress_bar *cbar)
     if (cbar->progress < cbar->max_value)
         putc(cbar->bar.head, stdout);
     else
-        if (chars_per_iter >= 1)
+        for (;chars_printed < bar_width; chars_printed++)
             putc(cbar->bar.indicator, stdout);
 
     /* Print spaces between the head and the right bar border */
@@ -284,12 +286,15 @@ void complex_bar_set_width(complex_progress_bar *cbar, unsigned int width)
     cbar->term_width = width;
 
 }
-void complex_bar_set_text(complex_progress_bar *cbar, char *text)
+void complex_bar_set_text(complex_progress_bar *cbar, char *format, ...)
 {
 
-    cbar->text = realloc(cbar->text, strlen(text) + 1);
-    strcpy(cbar->text, text);
-
+    va_list ap;
+    unsigned int width = get_term_width();
+    cbar->text = realloc(cbar->text, width + 1);
+    va_start(ap, format);
+    vsnprintf(cbar->text, width, format, ap);
+    va_end(ap);
 }
 int complex_bar_get_progress(complex_progress_bar *cbar)
 {

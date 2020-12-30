@@ -100,8 +100,11 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 > is the bar.
 > 
 > 2. Argument
-> is the new text.
+> is the new text formatted like `printf()`.
 > 
+> ... Argument
+> matches the formatting of the 2. Argument like `printf()`.
+>
 > Return value
 > NULL (void)
 
