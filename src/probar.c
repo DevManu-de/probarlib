@@ -134,6 +134,7 @@ void indicator_destroy(progress_indicator *indicator)
     munmap(indicator->text, indicator->max_text_size);
     munmap(indicator->term_width, sizeof(int));
     /* Finally dealloc the pointer */
+    free(indicator->text);
     free(indicator);
 
 }
@@ -171,7 +172,7 @@ int complex_bar_set_bar_attributes(complex_progress_bar *cbar, unsigned int term
     cbar->text_bar_gap = text_bar_gap;
     cbar->max_value = max_value;
 
-    return cbar->text != NULL && cbar->positioning != NULL ? 0 : -1;
+    return cbar->text != NULL ? 0 : -1;
 }
 
 void complex_bar_start_eta(complex_progress_bar *cbar)

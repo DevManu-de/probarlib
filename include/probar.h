@@ -37,7 +37,6 @@ typedef struct __complex_progress_bar {
     time_t ETA_START;
     time_t ETA_STOP;
     unsigned int text_bar_gap;
-    char *positioning;
 
 
 } complex_progress_bar;
