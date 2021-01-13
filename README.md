@@ -41,7 +41,7 @@ ProgressIndicationCircle:
 ## get_term_width()
 > 
 > Return value
-> is the width of the current terminal.
+> is the width of the current terminal in characters.
 
 # Test the different bars
 
