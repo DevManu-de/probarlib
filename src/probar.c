@@ -134,7 +134,6 @@ void indicator_destroy(progress_indicator *indicator)
     munmap(indicator->text, indicator->max_text_size);
     munmap(indicator->term_width, sizeof(int));
     /* Finally dealloc the pointer */
-    free(indicator->text);
     free(indicator);
 
 }

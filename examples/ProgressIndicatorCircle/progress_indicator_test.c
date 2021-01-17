@@ -30,7 +30,7 @@ int main(){
     indicator_stop(indicator);
     /* Now you can normally print to stdout with functions like puts */
     /* Free the memory of indicator */
-    indicator_destroy(indicator);
+	indicator_destroy(indicator);
 
     return 0;
 }
