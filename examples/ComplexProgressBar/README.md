@@ -12,7 +12,7 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 >
 >
 > 1. Argument
-> is the bar.
+> is the bar pointer.
 >
 > 2. Argument
 > is the width of the entire bar. 0 means dynamically resize complex_bar_set_width() is never required then.
@@ -21,7 +21,7 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 > is the text to be displayed in front of the bar.
 >
 > 4. Argument
-> is the left bar border
+> is the left progress bar border
 >
 > 5. Argument
 > is the indicator that shows the progress
@@ -33,10 +33,10 @@ The progress bar diplays a text, percentage and a bar that shows its progress. M
 > is the character between the head and the right bar border
 >
 > 8. Argument
-> is the right bar border
+> is the right progress bar border
 >
 > 9. Argument
-> is ETA. 1 means calculate ETA. 0 means dont calculate ETA.
+> is ETA. 1 means show ETA. 0 means dont show ETA.
 >
 > 10. Argument
 > is the space between text and the percentage
