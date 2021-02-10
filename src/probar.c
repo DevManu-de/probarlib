@@ -63,7 +63,7 @@ int indicator_start(progress_indicator *indicator)
             /* Calculate gap between text and indicator */
             unsigned int text_indicator_gap = indicator->term_width[0] - strlen(indicator->text) - 1;
             /* Print text */
-            printf("%s", indicator->text);
+            printf(indicator->text);
 
             /* Print spaces between text and indicator */
             unsigned int i;
@@ -226,7 +226,7 @@ int complex_bar_print(complex_progress_bar *cbar)
     int chars_printed = 0;
 
     /* Print text */
-    printf("%s", cbar->text);
+    printf(cbar->text);
 
     /* Print the spaces between text and percentage */
     int i;
