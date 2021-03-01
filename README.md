@@ -22,7 +22,7 @@ ProgressIndicationCircle:
 > This can display a text and shows a circular animation until it is stopped.
 >
 
-BTW probarlib is C89 compatible but not windows only linux is tested and supported
+BTW probarlib is GNU-C89 compatible but not windows only linux is tested and supported
 
 If any questions come up dont hesitate to open an issue or if you want to contribute just open a pull request.
 
